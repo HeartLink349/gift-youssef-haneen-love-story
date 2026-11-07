@@ -1194,6 +1194,8 @@
       border: 1px solid rgba(232, 188, 155, 0.3);
       background: rgba(17, 1, 3, 0.6);
       box-shadow: 0 6px 18px rgba(0, 0, 0, 0.6);
+      -webkit-transform: translateZ(0);
+      transform: translateZ(0);
     }
 
     .photo-frame img,
@@ -1202,6 +1204,10 @@
       height: auto;
       display: block;
       object-fit: cover;
+      -webkit-transform: translateZ(0);
+      transform: translateZ(0);
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
     }
 
     .video-frame video {
@@ -1370,6 +1376,17 @@
         font-size: 10px;
         bottom: 9px;
         padding: 6px 10px;
+      }
+    }
+
+    /* حل مشكلة اختفاء الصور على الآيفون ومتصفح سفاري */
+    @supports (-webkit-touch-callout: none) {
+      .photo-card,
+      .video-card {
+        opacity: 1 !important;
+        transform: none !important;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
       }
     }
 
@@ -1743,39 +1760,39 @@
 
       <h3 class="our-photos-title">صورنا</h3>
 
-      <!-- الصور الـ 7 الجديدة -->
+      <!-- الصور الـ 7 الجديدة بدون lazy loading لضمان ظهورها فوراً على الآيفون -->
       <div class="photos-list">
         <div class="photo-card">
           <div class="photo-frame">
-            <img src="https://e.top4top.io/p_3962scv6t1.jpg" alt="صورتنا 1" loading="lazy" />
+            <img src="https://e.top4top.io/p_3962scv6t1.jpg" alt="صورتنا 1" />
           </div>
           <div class="photo-caption">ب</div>
         </div>
 
         <div class="photo-card">
           <div class="photo-frame">
-            <img src="https://g.top4top.io/p_3962h9kq61.jpg" alt="صورتنا 2" loading="lazy" />
+            <img src="https://g.top4top.io/p_3962h9kq61.jpg" alt="صورتنا 2" />
           </div>
           <div class="photo-caption">ح</div>
         </div>
 
         <div class="photo-card">
           <div class="photo-frame">
-            <img src="https://f.top4top.io/p_3962wr3o11.jpg" alt="صورتنا 3" loading="lazy" />
+            <img src="https://f.top4top.io/p_3962wr3o11.jpg" alt="صورتنا 3" />
           </div>
           <div class="photo-caption">ب</div>
         </div>
 
         <div class="photo-card">
           <div class="photo-frame">
-            <img src="https://h.top4top.io/p_3962m6na31.jpg" alt="صورتنا 4" loading="lazy" />
+            <img src="https://h.top4top.io/p_3962m6na31.jpg" alt="صورتنا 4" />
           </div>
           <div class="photo-caption">ك</div>
         </div>
 
         <div class="photo-card final-love-card">
           <div class="photo-frame">
-            <img src="https://i.top4top.io/p_3962q8xyj1.jpg" alt="صورتنا 5" loading="lazy" />
+            <img src="https://i.top4top.io/p_3962q8xyj1.jpg" alt="صورتنا 5" />
           </div>
           <div class="photo-caption">بحبك</div>
         </div>
@@ -1783,13 +1800,13 @@
         <!-- الصور الإضافية تحت صورة بحبك -->
         <div class="photo-card">
           <div class="photo-frame">
-            <img src="https://j.top4top.io/p_39621uott1.jpg" alt="صورتنا 6" loading="lazy" />
+            <img src="https://j.top4top.io/p_39621uott1.jpg" alt="صورتنا 6" />
           </div>
         </div>
 
         <div class="photo-card">
           <div class="photo-frame">
-            <img src="https://k.top4top.io/p_39623ae791.jpg" alt="صورتنا 7" loading="lazy" />
+            <img src="https://k.top4top.io/p_39623ae791.jpg" alt="صورتنا 7" />
           </div>
         </div>
       </div>
@@ -2035,14 +2052,12 @@
 
       memoryVideos.forEach((video) => {
         video.addEventListener('play', function () {
-          // إيقاف أي فيديو آخر يعمل في نفس الوقت
           memoryVideos.forEach((otherVideo) => {
             if (otherVideo !== video && !otherVideo.paused) {
               otherVideo.pause();
             }
           });
 
-          // إيقاف الأغنية الخلفية تلقائياً عند تشغيل الفيديو
           if (!bgMusic.paused) {
             wasMusicPlayingBeforeVideo = true;
             bgMusic.pause();
